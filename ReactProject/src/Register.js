@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
 
 export default class Register extends Component{
 	render(){
+        const {container} = styles;
 		return(
 			<View style={container}>
 				<Text>

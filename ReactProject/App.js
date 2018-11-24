@@ -1,23 +1,14 @@
 import React, {Component} from 'react';
-import {AppRegistry, Text, View, StyleSheet} from 'react-native';
-import Login from './src/Login';
+import {AppRegistry} from 'react-native';
+
+import Router from './src/Router';
 
 export default class ReactProject extends Component{
 	render(){
 		return(
-			<View style={styles.container}>
-				<Login/>
-			</View>
+            <Router/>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
 
 AppRegistry.registerComponent('ReactProject', ()=>ReactProject)

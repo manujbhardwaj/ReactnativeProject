@@ -75,6 +75,7 @@ export default class Login extends Component{
 					error: '',
 					loggedIn: true
 				});
+                this.props.navigation.navigate('Home');
 			}
 			else{
 				this.setState({
@@ -88,47 +89,33 @@ export default class Login extends Component{
 	}
 	
 	render(){
-		switch(this.state.loggedIn){
-			case true:
-			return <Home/>;
-			case false:
-			return this.renderLogin();
-			default:
-			return <Loader size="large"/>
-		}
-	}
-	onRegister(){
-		console.log('Button pressed');
-		<Register/>;
-	}
-
-	renderLogin(){
-		const {fieldStyles, buttonArea, errorMessage, container} = styles;
-		return(
-			<View style={container}>
-				<MKTextField 
-					text={this.state.userName}
-					onTextChange={userName => this.setState({userName})}
-					textInputStyle={fieldStyles}
-					placeholder={'Email'}
-					tintColor={MKColor.Black}/>
-				<MKTextField 
-					text={this.state.password}
-					onTextChange={password => this.setState({password})}
-					textInputStyle={fieldStyles}
-					placeholder={'Password'}
-					tintColor={MKColor.Black}
-					password={true}/>
-				<Text style={errorMessage}>
-					{this.state.error}
-				</Text>
-				<View style={buttonArea}>
-					{this.renderLoader()}
-				</View>
-				<View style={buttonArea}>
-					<Button title='Register' onPress={this.onRegister.bind(this)} />
-				</View>
-			</View>
-		);
+        const {fieldStyles, buttonArea, errorMessage, container} = styles;
+        const {navigate} = this.props.navigation;
+        return(
+            <View style={container}>
+                <MKTextField
+                    text={this.state.userName}
+                    onTextChange={userName => this.setState({userName})}
+                    textInputStyle={fieldStyles}
+                    placeholder={'Email'}
+                    tintColor={MKColor.Black}/>
+                <MKTextField
+                    text={this.state.password}
+                    onTextChange={password => this.setState({password})}
+                    textInputStyle={fieldStyles}
+                    placeholder={'Password'}
+                    tintColor={MKColor.Black}
+                    password={true}/>
+                <Text style={errorMessage}>
+                    {this.state.error}
+                </Text>
+                <View style={buttonArea}>
+                    {this.renderLoader()}
+                </View>
+                <View style={buttonArea}>
+                    <Button title='Register' onPress={() => navigate('Register')} />
+                </View>
+            </View>
+        );
 	}
 }
