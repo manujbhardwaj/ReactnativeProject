@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
 });
 
 export default class Home extends Component{
+    static navigationOptions = { title: 'Welcome', header: null };
 	render(){
 		return(
 			<View>

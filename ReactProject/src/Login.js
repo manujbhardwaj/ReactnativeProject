@@ -87,6 +87,8 @@ export default class Login extends Component{
 			return responseJson;
 		})
 	}
+
+    static navigationOptions = { title: 'Welcome', header: null };
 	
 	render(){
         const {fieldStyles, buttonArea, errorMessage, container} = styles;
