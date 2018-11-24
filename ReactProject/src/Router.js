@@ -10,6 +10,7 @@ const Router = createStackNavigator({
     Login: {screen: Login},
     Register: {screen: Register},
     Home: {screen: Home},
+    Game: {screen: Game},
 });
 
 export default Router;

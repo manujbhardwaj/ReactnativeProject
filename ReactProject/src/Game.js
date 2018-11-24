@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class Home extends Component{
+export default class Game extends Component{
     static navigationOptions = { title: 'Welcome', header: null };
 
     render(){
@@ -28,7 +28,7 @@ export default class Home extends Component{
             <View style={outerContainer}>
                 <View style={container}>
                     <View style={buttonArea}>
-                        <Button title='Play Game' onPress={() => navigate('Game')} />
+                        <Text>Game</Text>
                     </View>
                 </View>
             </View>
