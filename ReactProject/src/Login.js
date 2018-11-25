@@ -72,7 +72,7 @@ export default class Login extends Component{
 		})
 		.then((response) => response.json())
 		.then((responseJson) => {
-			console.log(responseJson);
+            console.log("response:" + JSON.stringify(responseJson));
 			if(responseJson.success === '1'){
 				this.setState({
 					userName: '',
@@ -81,7 +81,7 @@ export default class Login extends Component{
 					error: '',
 					loggedIn: true
 				});
-                this.props.navigation.navigate('Home');
+                this.props.navigation.navigate('Home', {id: responseJson.userId});
 			}
 			else{
 				this.setState({

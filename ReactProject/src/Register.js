@@ -40,7 +40,7 @@ export default class Register extends Component {
         age: '',
         ethnicity: '',
         gender: '',
-        disabilty: false,
+        disabiltiy: false,
         mobileExp: '',
         psycoMeds: '',
         color: false,
@@ -133,8 +133,8 @@ export default class Register extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("response:" + responseJson);
-                if (responseJson.success === '1') {
+                console.log("response:" + JSON.stringify(responseJson));
+                if (responseJson.status === '1') {
                     this.setState({
                         userName: '',
                         password: '',
@@ -142,12 +142,12 @@ export default class Register extends Component {
                         error: '',
                         loggedIn: true
                     });
-                    this.props.navigation.navigate('Home');
+                    this.props.navigation.navigate('Home', {id: responseJson.participantId});
                 }
                 else {
                     this.setState({
                         loading: false,
-                        error: 'Invalid credentials.',
+                        error: responseJson.message,
                         loggedIn: false
                     });
                 }
@@ -307,10 +307,10 @@ export default class Register extends Component {
                             style={{flex: 1, padding: 10}}
                             onClick={() => {
                                 this.setState({
-                                    disabilty: !this.state.disabilty
+                                    disabiltiy: !this.state.disabiltiy
                                 })
                             }}
-                            isChecked={this.state.disabilty}
+                            isChecked={this.state.disabiltiy}
                             leftText={"Disability Status"}
                         />
                         <MKTextField
