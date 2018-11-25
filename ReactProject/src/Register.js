@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
 
 export default class Register extends Component{
     state = {
-        username: '',
+        userName: '',
         password: '',
         age: '',
         ethnicity: '',
         gender: '',
-        disability: false,
-        mobile_exp: '',
+        disabilty: false,
+        mobileExp: '',
         psycoMeds: '',
         color: false,
         education: '',
@@ -68,24 +68,25 @@ export default class Register extends Component{
             var encodedKey = encodeURIComponent(property);
             var encodedValue = encodeURIComponent(this.state[property]);
             console.log(encodedKey + "=" + encodedValue);
-            formBody.push(encodedValue);
+            formBody.push(encodedKey + "=" + encodedValue);
         }
-        formBody = formBody.join("&param=");
+        formBody = formBody.join("&");
 
         console.log(formBody);
 
-        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/registration/Register?queryType=register&param='+formBody, {
+        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/Register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             },
+            body: formBody,
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("response"+responseJson);
+                console.log("response:"+responseJson);
                 if(responseJson.success === '1'){
                     this.setState({
-                        username: '',
+                        userName: '',
                         password: '',
                         loading: false,
                         error: '',
@@ -114,8 +115,8 @@ export default class Register extends Component{
                     <ScrollView>
                         <MKTextField
                             style={{paddingBottom: 10}}
-                            text={this.state.username}
-                            onTextChange={username => this.setState({username})}
+                            text={this.state.userName}
+                            onTextChange={userName => this.setState({userName})}
                             textInputStyle={fieldStyles}
                             placeholder={'Username'}
                             tintColor={MKColor.Black}/>
@@ -225,8 +226,8 @@ export default class Register extends Component{
                             <Picker.Item label="Choose not to disclose" value="notSpecified"/>
                         </Picker>
                         <Picker
-                            selectedValue={this.state.mobile_exp}
-                            onValueChange={(itemValue, itemIndex) => this.setState({mobile_exp: itemValue})}>
+                            selectedValue={this.state.mobileExp}
+                            onValueChange={(itemValue, itemIndex) => this.setState({mobileExp: itemValue})}>
                             <Picker.Item label="Mobile Experience" value="0"/>
                             <Picker.Item label="New User" value="newUser"/>
                             <Picker.Item label="Average" value="average"/>
@@ -255,10 +256,10 @@ export default class Register extends Component{
                             style={{flex: 1, padding: 10}}
                             onClick={()=>{
                                 this.setState({
-                                    disability:!this.state.disability
+                                    disabilty:!this.state.disabilty
                                 })
                             }}
-                            isChecked={this.state.disability}
+                            isChecked={this.state.disabilty}
                             leftText={"Disability Status"}
                         />
                         <MKTextField
