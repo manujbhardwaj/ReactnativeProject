@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import {Text, View, ScrollView,StyleSheet, Button, Picker} from 'react-native';
+import {Text, View, ScrollView, StyleSheet, Button, Picker, Alert} from 'react-native';
 import {MKTextField} from "react-native-material-kit";
 import CheckBox from 'react-native-check-box'
 import * as MKColor from "react-native-material-kit/lib/MKColor";
 import Loader from "./Loader";
 
 const styles = StyleSheet.create({
-    fieldStyles:{
+    fieldStyles: {
         height: 40,
     },
-    buttonArea:{
+    buttonArea: {
         marginBottom: 20,
     },
     container: {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    errorMessage:{
+    errorMessage: {
         marginTop: 15,
         fontSize: 15,
         color: 'red',
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default class Register extends Component{
+export default class Register extends Component {
     state = {
         userName: '',
         password: '',
@@ -52,16 +52,66 @@ export default class Register extends Component{
         confirmPassword: '',
     };
 
-    renderLoader(){
-        if(this.state.loading){
+    renderLoader() {
+        if (this.state.loading) {
             return <Loader size='large'/>
         }
-        else{
-            return <Button title='Register' onPress={this.onRegister.bind(this)} />
+        else {
+            return <Button title='Register' onPress={this.getAgreement.bind(this)}/>
         }
     }
-    onRegister(){
-        this.setState({error: '', loading: true})
+
+    getAgreement() {
+        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/Register?queryType=getAgreement', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+        })
+            .then((responseJson) => {
+                var resp = responseJson._bodyInit;
+                if (responseJson.status === 200) {
+                    Alert.alert(
+                        'User Agreement',
+                        resp,
+                        [
+                            {text: 'Agree', onPress: () => this.onRegister()},
+                            {
+                                text: 'Disagree', onPress: () => {
+                                    return null
+                                }
+                            },
+                        ],
+                        {cancelable: false}
+                    );
+                }
+                else {
+                    this.setState({
+                        loading: false,
+                        error: 'Could not fetch user agreement.',
+                        loggedIn: false
+                    });
+                }
+                return responseJson;
+            });
+
+
+    }
+
+    onRegister() {
+        this.setState({error: '', loading: true});
+        console.log("manuj");
+
+        if (this.state.age === '') {
+            console.log("manuj4");
+            this.setState({
+                error: 'Invalid age.',
+                loading: false,
+            });
+            return null;
+        }
+
+        console.log("manuj3");
 
         var formBody = [];
         for (var property in this.state) {
@@ -83,8 +133,8 @@ export default class Register extends Component{
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("response:"+responseJson);
-                if(responseJson.success === '1'){
+                console.log("response:" + responseJson);
+                if (responseJson.success === '1') {
                     this.setState({
                         userName: '',
                         password: '',
@@ -94,7 +144,7 @@ export default class Register extends Component{
                     });
                     this.props.navigation.navigate('Home');
                 }
-                else{
+                else {
                     this.setState({
                         loading: false,
                         error: 'Invalid credentials.',
@@ -105,11 +155,12 @@ export default class Register extends Component{
             })
     }
 
-    static navigationOptions = { title: 'Welcome', header: null };
-    render(){
+    static navigationOptions = {title: 'Welcome', header: null};
+
+    render() {
         const {fieldStyles, buttonArea, errorMessage, container, outerContainer} = styles;
         const {navigate} = this.props.navigation;
-        return(
+        return (
             <View style={outerContainer}>
                 <View style={container}>
                     <ScrollView>
@@ -244,9 +295,9 @@ export default class Register extends Component{
                             tintColor={MKColor.Black}/>
                         <CheckBox
                             style={{flex: 1, padding: 10}}
-                            onClick={()=>{
+                            onClick={() => {
                                 this.setState({
-                                    color:!this.state.color
+                                    color: !this.state.color
                                 })
                             }}
                             isChecked={this.state.color}
@@ -254,9 +305,9 @@ export default class Register extends Component{
                         />
                         <CheckBox
                             style={{flex: 1, padding: 10}}
-                            onClick={()=>{
+                            onClick={() => {
                                 this.setState({
-                                    disabilty:!this.state.disabilty
+                                    disabilty: !this.state.disabilty
                                 })
                             }}
                             isChecked={this.state.disabilty}
@@ -275,7 +326,7 @@ export default class Register extends Component{
                             {this.renderLoader()}
                         </View>
                         <View style={buttonArea}>
-                            <Button title='Cancel' onPress={() => navigate('Login')} />
+                            <Button title='Cancel' onPress={() => navigate('Login')}/>
                         </View>
                     </ScrollView>
                 </View>
