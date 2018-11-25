@@ -39,8 +39,9 @@ export default class Login extends Component{
 		error: '',
 		loggedIn: false,
 	};
-	
-	renderLoader(){
+
+    renderLoader(){
+        console.log("End");
 		if(this.state.loading){
 			return <Loader size='large'/>
 		}
