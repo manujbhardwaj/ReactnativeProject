@@ -37,11 +37,9 @@ export default class Login extends Component{
 		password: '',
 		loading: false,
 		error: '',
-		loggedIn: false,
 	};
 
     renderLoader(){
-        console.log("End");
 		if(this.state.loading){
 			return <Loader size='large'/>
 		}
@@ -50,15 +48,13 @@ export default class Login extends Component{
 		}
 	}
 	onLogin(){
-		console.log("Reached");
 		
-		this.setState({error: '', loading: true})
+		this.setState({error: '', loading: true});
 
 		var formBody = [];
 		for (var property in this.state) {
 			var encodedKey = encodeURIComponent(property);
 			var encodedValue = encodeURIComponent(this.state[property]);
-			console.log(encodedKey + "=" + encodedValue);
 			formBody.push(encodedKey + "=" + encodedValue);
 		}
 		formBody = formBody.join("&");
@@ -72,22 +68,17 @@ export default class Login extends Component{
 		})
 		.then((response) => response.json())
 		.then((responseJson) => {
-            console.log("response:" + JSON.stringify(responseJson));
 			if(responseJson.success === '1'){
 				this.setState({
-					userName: '',
-					password: '',
 					loading: false,
 					error: '',
-					loggedIn: true
 				});
-                this.props.navigation.navigate('Home', {id: responseJson.userId});
+                this.props.navigation.navigate('Home', {id: responseJson.userId, tgId: responseJson.tgId});
 			}
 			else{
 				this.setState({
 					loading: false,
 					error: 'Invalid credentials.',
-					loggedIn: false
 				});
 			}
 			return responseJson;

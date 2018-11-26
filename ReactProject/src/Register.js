@@ -48,7 +48,6 @@ export default class Register extends Component {
         regCode: '',
         loading: false,
         error: '',
-        loggedIn: false,
         confirmPassword: '',
     };
 
@@ -100,10 +99,8 @@ export default class Register extends Component {
 
     onRegister() {
         this.setState({error: '', loading: true});
-        console.log("manuj");
 
         if (this.state.age === '') {
-            console.log("manuj4");
             this.setState({
                 error: 'Invalid age.',
                 loading: false,
@@ -111,18 +108,13 @@ export default class Register extends Component {
             return null;
         }
 
-        console.log("manuj3");
-
         var formBody = [];
         for (var property in this.state) {
             var encodedKey = encodeURIComponent(property);
             var encodedValue = encodeURIComponent(this.state[property]);
-            console.log(encodedKey + "=" + encodedValue);
             formBody.push(encodedKey + "=" + encodedValue);
         }
         formBody = formBody.join("&");
-
-        console.log(formBody);
 
         fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/Register', {
             method: 'POST',
@@ -133,16 +125,13 @@ export default class Register extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("response:" + JSON.stringify(responseJson));
                 if (responseJson.status === '1') {
                     this.setState({
-                        userName: '',
-                        password: '',
                         loading: false,
                         error: '',
                         loggedIn: true
                     });
-                    this.props.navigation.navigate('Home', {id: responseJson.participantId});
+                    this.props.navigation.navigate('Login');
                 }
                 else {
                     this.setState({

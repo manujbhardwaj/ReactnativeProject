@@ -24,12 +24,11 @@ export default class Home extends Component{
     render(){
         const {buttonArea, container, outerContainer} = styles;
         const {navigate} = this.props.navigation;
-        console.log("here:" + JSON.stringify(this.props.navigation.state.params.id));
         return(
             <View style={outerContainer}>
                 <View style={container}>
                     <View style={buttonArea}>
-                        <Button title='Play Game' onPress={() => navigate('Game')} />
+                        <Button title='Play Game' onPress={() => navigate('Game', {id: this.props.navigation.state.params.id, tgId: this.props.navigation.state.params.tgId})} />
                     </View>
                 </View>
             </View>
