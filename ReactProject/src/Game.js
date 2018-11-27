@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button, Alert, FlatList, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Button, FlatList, ScrollView} from 'react-native';
+import CheckBox from 'react-native-check-box'
 import Loader from "./Loader";
 
 const styles = StyleSheet.create({
@@ -26,15 +27,55 @@ export default class Game extends Component{
         tgId: '',
         id:'',
         questions: [],
+        checked: [],
         ques: false,
         loading: false,
         error: '',
     };
 
-    renderIf(item) {
+    renderIf(item, index) {
         if (item.responseType === 'Categorical') {
             return (
                 <View>
+                    <CheckBox
+                        leftText={item.startLabel}
+                        isChecked={this.state.checked[index] === item.startLabel}
+                        onClick={() =>{
+                            console.log("a:"+JSON.stringify(this.state.checked));
+                            console.log("b:"+this.state.checked[index]);
+                            console.log("b:"+typeof (this.state.checked[index]));
+                            console.log("c:"+item.startLabel);
+                            console.log("b:"+typeof (item.startLabel));
+                            console.log("d:"+this.state.checked[index] === item.startLabel);
+                            let a = this.state.checked;
+                            a[index] = item.startLabel;
+                            this.setState({
+                                checked: a
+                            });
+                            console.log("d:"+this.state.checked[index] === item.startLabel);
+                            console.log(JSON.stringify(this.state.checked));
+                        }}
+                    />
+                    <CheckBox
+                        leftText={item.endLabel}
+                        isChecked={this.state.checked[index] === item.endLabel}
+                        onClick={() =>{
+                            console.log("d:"+JSON.stringify(this.state.checked));
+                            console.log("e:"+this.state.checked[index]);
+                            console.log("e:"+typeof (this.state.checked[index]));
+                            console.log("f:"+item.endLabel);
+                            console.log("f:"+typeof(item.endLabel));
+
+                            console.log("d:"+this.state.checked[index] === item.endLabel);
+                            let a = this.state.checked;
+                            a[index] = item.endLabel;
+                            this.setState({
+                                checked: a
+                            });
+                            console.log("d:"+this.state.checked[index] === item.endLabel);
+                            console.log(JSON.stringify(this.state.checked));
+                        }}
+                    />
                     <Text>
                         {`${item.startLabel}`}
                     </Text>
@@ -67,6 +108,14 @@ export default class Game extends Component{
                         ques: true,
                         error: ''
                     });
+                    var a = [];
+                    for(var i = 0; i < this.state.questions.length; i++){
+                        a.push(this.state.questions[i].startLabel);
+                    }
+                    this.setState({
+                        checked: a
+                    });
+                    console.log(JSON.stringify(this.state.checked));
                 }
                 else {
                     this.setState({
@@ -96,13 +145,12 @@ export default class Game extends Component{
                         <FlatList
                             data={this.state.questions}
                             keyExtractor={(item, index) => index.toString()}
-                            renderItem={({item}) =>
+                            renderItem={({item, index}) =>
                                 <View>
                                     <Text style={buttonArea}>
                                         {`${item.questionId}`}. {`${item.questionName}`}
                                     </Text>
-
-                                    {this.renderIf(item)}
+                                    {this.renderIf(item, index)}
                                 </View>
                             }
                         />
