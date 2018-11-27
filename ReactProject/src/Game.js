@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button, Alert, FlatList} from 'react-native';
+import {View, Text, StyleSheet, Button, Alert, FlatList, ScrollView} from 'react-native';
 import Loader from "./Loader";
 
 const styles = StyleSheet.create({
@@ -31,6 +31,23 @@ export default class Game extends Component{
         error: '',
     };
 
+    renderIf(item) {
+        if (item.responseType === 'Categorical') {
+            return (
+                <View>
+                    <Text>
+                        {`${item.startLabel}`}
+                    </Text>
+                    <Text>
+                        {`${item.endLabel}`}
+                    </Text>
+                </View>
+            );
+        } else {
+            return null;
+        }
+    }
+
     componentDidMount() {
 
         this.setState({error: '', loading: true});
@@ -50,7 +67,6 @@ export default class Game extends Component{
                         ques: true,
                         error: ''
                     });
-                    console.log("ques:"+ this.state.questions);
                 }
                 else {
                     this.setState({
@@ -76,14 +92,21 @@ export default class Game extends Component{
         return(
             <View style={outerContainer}>
                 <View style={container}>
-                    <FlatList
-                        data={this.state.questions}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({item}) =>
-                            <Text>
-                                {`${item.responseType}`}
-                            </Text>}
-                    />
+                    <ScrollView>
+                        <FlatList
+                            data={this.state.questions}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({item}) =>
+                                <View>
+                                    <Text style={buttonArea}>
+                                        {`${item.questionId}`}. {`${item.questionName}`}
+                                    </Text>
+
+                                    {this.renderIf(item)}
+                                </View>
+                            }
+                        />
+                    </ScrollView>
                 </View>
             </View>
         );
