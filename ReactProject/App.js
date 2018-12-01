@@ -10,5 +10,3 @@ export default class ReactProject extends Component{
 		);
 	}
 }
-
-AppRegistry.registerComponent('ReactProject', ()=>ReactProject)

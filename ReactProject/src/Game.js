@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button, FlatList, ScrollView} from 'react-native';
-import CheckBox from 'react-native-check-box'
+import {View, Text, StyleSheet, FlatList, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Loader from "./Loader";
 
 const styles = StyleSheet.create({
@@ -19,69 +18,64 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    img: {
+        height: 20,
+        width: 20,
+    },
+    btn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+    },
 });
 
-export default class Game extends Component{
+export default class Game extends Component {
 
-    state = {
-        tgId: '',
-        id:'',
-        questions: [],
-        checked: [],
-        ques: false,
-        loading: false,
-        error: '',
-    };
+    constructor(){
+        super();
+        this.state = {
+            tgId: '',
+            id: '',
+            questions: [],
+            checked: [],
+            loading: false,
+            error: '',
+        };
 
+    }
+
+    onUpdate(item, index){
+        let a = this.state.checked;
+        a[index] = item;
+        this.setState({
+            checked: a,
+        });
+    }
     renderIf(item, index) {
+        console.log("manuj");
         if (item.responseType === 'Categorical') {
             return (
                 <View>
-                    <CheckBox
-                        leftText={item.startLabel}
-                        isChecked={this.state.checked[index] === item.startLabel}
-                        onClick={() =>{
-                            console.log("a:"+JSON.stringify(this.state.checked));
-                            console.log("b:"+this.state.checked[index]);
-                            console.log("b:"+typeof (this.state.checked[index]));
-                            console.log("c:"+item.startLabel);
-                            console.log("b:"+typeof (item.startLabel));
-                            console.log("d:"+this.state.checked[index] === item.startLabel);
-                            let a = this.state.checked;
-                            a[index] = item.startLabel;
-                            this.setState({
-                                checked: a
-                            });
-                            console.log("d:"+this.state.checked[index] === item.startLabel);
-                            console.log(JSON.stringify(this.state.checked));
-                        }}
-                    />
-                    <CheckBox
-                        leftText={item.endLabel}
-                        isChecked={this.state.checked[index] === item.endLabel}
-                        onClick={() =>{
-                            console.log("d:"+JSON.stringify(this.state.checked));
-                            console.log("e:"+this.state.checked[index]);
-                            console.log("e:"+typeof (this.state.checked[index]));
-                            console.log("f:"+item.endLabel);
-                            console.log("f:"+typeof(item.endLabel));
-
-                            console.log("d:"+this.state.checked[index] === item.endLabel);
-                            let a = this.state.checked;
-                            a[index] = item.endLabel;
-                            this.setState({
-                                checked: a
-                            });
-                            console.log("d:"+this.state.checked[index] === item.endLabel);
-                            console.log(JSON.stringify(this.state.checked));
-                        }}
-                    />
-                    <Text>
-                        {`${item.startLabel}`}
-                    </Text>
-                    <Text>
-                        {`${item.endLabel}`}
-                    </Text>
+                    <View style={styles.btn}>
+                        {this.state.checked[index] == item.startLabel ?
+                            <TouchableOpacity>
+                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
+                            </TouchableOpacity> :
+                            <TouchableOpacity onPress={ ()=>{this.onUpdate(item.startLabel, index)}}>
+                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
+                            </TouchableOpacity>}
+                        <Text> {item.startLabel}</Text>
+                    </View>
+                    <View style={styles.btn}>
+                        {this.state.checked[index] == item.endLabel ?
+                            <TouchableOpacity>
+                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
+                            </TouchableOpacity> :
+                            <TouchableOpacity onPress={ ()=>{this.onUpdate(item.endLabel, index)}}>
+                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
+                            </TouchableOpacity>}
+                        <Text> {item.endLabel}</Text>
+                    </View>
                 </View>
             );
         } else {
@@ -93,7 +87,7 @@ export default class Game extends Component{
 
         this.setState({error: '', loading: true});
 
-        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/question?targetGroupId='+this.state.tgId+'&source=android', {
+        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/question?targetGroupId=' + this.state.tgId + '&source=android', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -104,56 +98,53 @@ export default class Game extends Component{
                 if (responseJson.status === '200') {
                     this.setState({
                         questions: responseJson.results,
-                        loading: false,
-                        ques: true,
                         error: ''
                     });
                     var a = [];
-                    for(var i = 0; i < this.state.questions.length; i++){
+                    for (var i = 0; i < this.state.questions.length; i++) {
                         a.push(this.state.questions[i].startLabel);
                     }
                     this.setState({
-                        checked: a
+                        checked: a,
+                        loading: false,
                     });
-                    console.log(JSON.stringify(this.state.checked));
                 }
                 else {
                     this.setState({
                         loading: false,
-                        ques: true,
                         error: 'Could not fetch questions.',
                     });
                 }
             });
     }
 
-    static navigationOptions = { title: 'Welcome', header: null };
+    static navigationOptions = {title: 'Welcome', header: null};
 
-    render(){
-        this.state.id= this.props.navigation.state.params.id;
-        this.state.tgId= this.props.navigation.state.params.tgId;
+    render() {
+        this.state.id = this.props.navigation.state.params.id;
+        this.state.tgId = this.props.navigation.state.params.tgId;
 
         const {buttonArea, container, outerContainer} = styles;
         const {navigate} = this.props.navigation;
         if (this.state.loading) {
             return <Loader size='large'/>;
         }
-        return(
+        return (
             <View style={outerContainer}>
                 <View style={container}>
                     <ScrollView>
-                        <FlatList
-                            data={this.state.questions}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({item, index}) =>
-                                <View>
-                                    <Text style={buttonArea}>
-                                        {`${item.questionId}`}. {`${item.questionName}`}
-                                    </Text>
-                                    {this.renderIf(item, index)}
-                                </View>
-                            }
-                        />
+                        {
+                            this.state.questions.map((item, index)=>{
+                                return(
+                                    <View key={index} style={buttonArea}>
+                                        <Text>
+                                            {`${item.questionId}`}. {`${item.questionName}`}
+                                        </Text>
+                                        {this.renderIf(item, index)}
+                                    </View>
+                                )
+                            })
+                        }
                     </ScrollView>
                 </View>
             </View>
