@@ -93,8 +93,6 @@ export default class Register extends Component {
                 }
                 return responseJson;
             });
-
-
     }
 
     onRegister() {
