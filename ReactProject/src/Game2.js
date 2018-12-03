@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
         marginTop: 15,
         fontSize: 15,
         color: 'red',
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         width: 350,
         paddingBottom: 20,
-        paddingTop: 20
+        paddingTop: 20,
     },
     outerContainer: {
         flex: 1,
@@ -46,17 +46,23 @@ const styles = StyleSheet.create({
 
 export default class Game2 extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
             tgId: '',
             participantId: '',
+            sessionId: '',
             questions: [],
             checked: [],
             slider: [],
             loading: false,
             error: '',
         };
+
+        this.state.participantId = props.navigation.state.params.userId;
+        this.state.tgId = props.navigation.state.params.tgId;
+        this.state.sessionId = props.navigation.state.params.sessionId;
     }
 
     onUpdate(item, index) {
@@ -108,17 +114,17 @@ export default class Game2 extends Component {
                                 maximumValue={5}
                                 value={this.state.slider[index]}
                                 onValuechange={val => {
-                                    let a = this.state.checked;
+                                    let a = this.state.slider;
                                     a[index] = val;
                                     this.setState({
-                                        checked: a,
+                                        slider: a,
                                     });
                                 }}
                                 onSlidingComplete={val => {
-                                    let a = this.state.checked;
+                                    let a = this.state.slider;
                                     a[index] = val;
                                     this.setState({
-                                        checked: a,
+                                        slider: a,
                                     });
                                 }}/>
                     </View>
@@ -149,7 +155,7 @@ export default class Game2 extends Component {
         encodedValue = encodeURIComponent(this.state.participantId);
         formBody.push(encodedKey + "=" + encodedValue);
         encodedKey = encodeURIComponent("sessionId");
-        encodedValue = encodeURIComponent(null);
+        encodedValue = encodeURIComponent(this.state.sessionId);
         formBody.push(encodedKey + "=" + encodedValue);
         encodedKey = encodeURIComponent("questionSession");
         encodedValue = encodeURIComponent("0");
@@ -215,11 +221,44 @@ export default class Game2 extends Component {
             })
     }
 
-    render() {
-        this.state.participantId = this.props.navigation.state.params.userId;
-        this.state.tgId = this.props.navigation.state.params.tgId;
-        this.state.sessionId = this.props.navigation.state.params.sessionId;
+    componentDidMount() {
+        this.setState({error: '', loading: true});
 
+        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/question?targetGroupId=' + this.state.tgId + '&source=android', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.status === '200') {
+                    this.setState({
+                        questions: responseJson.results,
+                        error: ''
+                    });
+                    var a = [];
+                    var b = [];
+                    for (var i = 0; i < this.state.questions.length; i++) {
+                        a.push(this.state.questions[i].startLabel);
+                        b.push(0);
+                    }
+                    this.setState({
+                        checked: a,
+                        slider: b,
+                        loading: false,
+                    });
+                }
+                else {
+                    this.setState({
+                        loading: false,
+                        error: 'Could not fetch questions.',
+                    });
+                }
+            });
+    }
+
+    render() {
         const {buttonArea, container, outerContainer, errorMessage} = styles;
         if (this.state.loading) {
             return <Loader size='large'/>;
@@ -227,9 +266,27 @@ export default class Game2 extends Component {
         return (
             <View style={outerContainer}>
                 <View style={container}>
-                    <Text>
-                        Game2
-                    </Text>
+                    <ScrollView>
+                        {
+                            this.state.questions.map((item, index) => {
+                                return (
+                                    <View key={index} style={buttonArea}>
+                                        <Text>
+                                            {`${item.questionId}`}. {`${item.questionName}`}
+                                        </Text>
+                                        {this.renderIf(item, index)}
+                                    </View>
+                                )
+                            })
+                        }
+                        <View style={buttonArea}>
+                            {this.renderLoader()}
+                        </View>
+                        <Text style={errorMessage}>
+                            {this.state.error}
+                        </Text>
+
+                    </ScrollView>
                 </View>
             </View>
         );

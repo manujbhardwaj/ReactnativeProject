@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
 
 export default class Game extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
             tgId: '',
             participantId: '',
@@ -57,6 +58,9 @@ export default class Game extends Component {
             loading: false,
             error: '',
         };
+
+        this.state.participantId = props.navigation.state.params.id;
+        this.state.tgId = props.navigation.state.params.tgId;
     }
 
     onUpdate(item, index) {
@@ -108,17 +112,17 @@ export default class Game extends Component {
                                 maximumValue={5}
                                 value={this.state.slider[index]}
                                 onValuechange={val => {
-                                    let a = this.state.checked;
+                                    let a = this.state.slider;
                                     a[index] = val;
                                     this.setState({
-                                        checked: a,
+                                        slider: a,
                                     });
                                 }}
                                 onSlidingComplete={val => {
-                                    let a = this.state.checked;
+                                    let a = this.state.slider;
                                     a[index] = val;
                                     this.setState({
-                                        checked: a,
+                                        slider: a,
                                     });
                                 }}/>
                     </View>
@@ -253,8 +257,6 @@ export default class Game extends Component {
     }
 
     render() {
-        this.state.participantId = this.props.navigation.state.params.id;
-        this.state.tgId = this.props.navigation.state.params.tgId;
 
         const {buttonArea, container, outerContainer, errorMessage} = styles;
         if (this.state.loading) {

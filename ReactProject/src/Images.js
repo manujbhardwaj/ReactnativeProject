@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
 
 export default class Images extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             tgId: '',
             sessionId: '',
@@ -37,10 +37,18 @@ export default class Images extends Component {
             neutralColor: [],
             images: [],
             index: 0,
+            resp: [],
             loading: false,
             error: '',
             gestureName: 'none',
         };
+
+        this.state.positiveColor = props.navigation.state.params.positiveColor;
+        this.state.negativeColor = props.navigation.state.params.negativeColor;
+        this.state.neutralColor = props.navigation.state.params.neutralColor;
+        this.state.sessionId = props.navigation.state.params.sessionId;
+        this.state.tgId = props.navigation.state.params.tgId;
+        this.state.userId = props.navigation.state.params.userId;
     }
 
     static navigationOptions = {title: 'Welcome', header: null};
@@ -67,9 +75,15 @@ export default class Images extends Component {
 
     }
 
+    sendResp(){
+
+    }
+
     onSwipeUp() {
         console.log("up");
+
         if (this.state.index === this.state.images.length - 1) {
+            this.sendResp();
             this.props.navigation.navigate('Game2', {
                 tgId: this.state.tgId,
                 sessionId: this.state.sessionId,
@@ -86,6 +100,7 @@ export default class Images extends Component {
     onSwipeDown() {
         console.log("down");
         if (this.state.index === this.state.images.length - 1) {
+            this.sendResp();
             this.props.navigation.navigate('Game2', {
                 tgId: this.state.tgId,
                 sessionId: this.state.sessionId,
@@ -105,13 +120,6 @@ export default class Images extends Component {
             velocityThreshold: 0.3,
             directionalOffsetThreshold: 80
         };
-
-        this.state.positiveColor = this.props.navigation.state.params.positiveColor;
-        this.state.negativeColor = this.props.navigation.state.params.negativeColor;
-        this.state.neutralColor = this.props.navigation.state.params.neutralColor;
-        this.state.sessionId = this.props.navigation.state.params.sessionId;
-        this.state.tgId = this.props.navigation.state.params.tgId;
-        this.state.userId = this.props.navigation.state.params.userId;
 
         if (this.state.loading) {
             return <Loader size='large'/>;
