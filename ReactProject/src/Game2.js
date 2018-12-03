@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class Game extends Component {
+export default class Game2 extends Component {
 
     constructor() {
         super();
@@ -126,43 +126,6 @@ export default class Game extends Component {
                 </View>
             );
         }
-    }
-
-    componentDidMount() {
-        this.setState({error: '', loading: true});
-
-        fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/question?targetGroupId=' + this.state.tgId + '&source=android', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.status === '200') {
-                    this.setState({
-                        questions: responseJson.results,
-                        error: ''
-                    });
-                    var a = [];
-                    var b = [];
-                    for (var i = 0; i < this.state.questions.length; i++) {
-                        a.push(this.state.questions[i].startLabel);
-                        b.push(0);
-                    }
-                    this.setState({
-                        checked: a,
-                        slider: b,
-                        loading: false,
-                    });
-                }
-                else {
-                    this.setState({
-                        loading: false,
-                        error: 'Could not fetch questions.',
-                    });
-                }
-            });
     }
 
     static navigationOptions = {title: 'Welcome', header: null};
@@ -253,8 +216,9 @@ export default class Game extends Component {
     }
 
     render() {
-        this.state.participantId = this.props.navigation.state.params.id;
+        this.state.participantId = this.props.navigation.state.params.userId;
         this.state.tgId = this.props.navigation.state.params.tgId;
+        this.state.sessionId = this.props.navigation.state.params.sessionId;
 
         const {buttonArea, container, outerContainer, errorMessage} = styles;
         if (this.state.loading) {
@@ -263,27 +227,9 @@ export default class Game extends Component {
         return (
             <View style={outerContainer}>
                 <View style={container}>
-                    <ScrollView>
-                        {
-                            this.state.questions.map((item, index) => {
-                                return (
-                                    <View key={index} style={buttonArea}>
-                                        <Text>
-                                            {`${item.questionId}`}. {`${item.questionName}`}
-                                        </Text>
-                                        {this.renderIf(item, index)}
-                                    </View>
-                                )
-                            })
-                        }
-                        <View style={buttonArea}>
-                            {this.renderLoader()}
-                        </View>
-                        <Text style={errorMessage}>
-                            {this.state.error}
-                        </Text>
-
-                    </ScrollView>
+                    <Text>
+                        Game2
+                    </Text>
                 </View>
             </View>
         );

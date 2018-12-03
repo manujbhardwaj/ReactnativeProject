@@ -6,6 +6,7 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Game from './Game';
+import Game2 from './Game2';
 import Images from './Images';
 
 const Router = createStackNavigator({
@@ -13,6 +14,7 @@ const Router = createStackNavigator({
     Register: {screen: Register},
     Home: {screen: Home},
     Game: {screen: Game},
+    Game2: {screen: Game2},
     Images: {screen: Images},
 });
 

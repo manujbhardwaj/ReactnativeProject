@@ -12,35 +12,14 @@ import {
 import Loader from "./Loader";
 
 const styles = StyleSheet.create({
-    buttonArea: {
-        marginBottom: 20,
-    },
-    errorMessage: {
-        marginTop: 15,
-        fontSize: 15,
-        color: 'red',
-        alignSelf: 'center'
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        width: 350,
-        paddingBottom: 20,
-        paddingTop: 20
+    img: {
+        height: 400,
+        width: 400,
     },
     outerContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    img: {
-        height: 200,
-        width: 200,
-    },
-    btn: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
     },
 });
 
@@ -51,10 +30,12 @@ export default class Images extends Component {
         this.state = {
             tgId: '',
             sessionId: '',
+            userId: '',
             positiveColor: [],
             negativeColor: [],
             neutralColor: [],
             images: [],
+            index: 0,
             loading: false,
             error: '',
         };
@@ -80,31 +61,70 @@ export default class Images extends Component {
             })
     }
 
+    onUpdate() {
+        console.log("manuj");
+        if(this.state.index === this.state.images.length-1){
+            this.props.navigation.navigate('Game2', {tgId: this.state.tgId, sessionId: this.state.sessionId, userId: this.state.userId});
+        }
+        else{
+            this.setState({
+                index: this.state.index+1,
+            });
+        }
+    }
+
     render() {
         this.state.positiveColor = this.props.navigation.state.params.positiveColor;
         this.state.negativeColor = this.props.navigation.state.params.negativeColor;
         this.state.neutralColor = this.props.navigation.state.params.neutralColor;
         this.state.sessionId = this.props.navigation.state.params.sessionId;
         this.state.tgId = this.props.navigation.state.params.tgId;
+        this.state.userId = this.props.navigation.state.params.userId;
 
-        const {buttonArea, container, outerContainer} = styles;
         if (this.state.loading) {
             return <Loader size='large'/>;
         }
-        return (
-            <View style={outerContainer}>
-                <View style={container}>
-                    {
-                        this.state.images.map((item, index) => {
-                            return (
-                                <View key={index} style={buttonArea}>
-                                    <Image style={styles.img} source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath='+item.imagePath+'&source=android'}}/>
-                                </View>
-                            )
-                        })
-                    }
-                </View>
-            </View>
-        );
+        if (this.state.images.length !== 0) {
+            if (this.state.images[this.state.index].imageType === 'Positive') {
+                return (
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: this.state.positiveColor
+                    }}>
+                        <TouchableOpacity onPress={() => {
+                            this.onUpdate()
+                        }}>
+                        <Image style={styles.img}
+                               source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=' + this.state.images[this.state.index].imagePath + '&source=android'}}/>
+                        <Text>{this.state.images[this.state.index].imagePath}</Text>
+                        <Text>{this.state.index}</Text>
+                        </TouchableOpacity>
+                    </View>);
+
+            }
+            else {
+                return (
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: this.state.negativeColor
+                    }}>
+                        <TouchableOpacity onPress={() => {
+                            this.onUpdate()
+                        }}>
+                        <Image style={styles.img}
+                               source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=' + this.state.images[this.state.index].imagePath + '&source=android'}}/>
+                        <Text>{this.state.images[this.state.index].imagePath}</Text>
+                        <Text>{this.state.index}</Text>
+                        </TouchableOpacity>
+                    </View>);
+            }
+        }
+        else {
+            return null;
+        }
     }
 }
