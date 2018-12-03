@@ -158,7 +158,7 @@ export default class Game2 extends Component {
         encodedValue = encodeURIComponent(this.state.sessionId);
         formBody.push(encodedKey + "=" + encodedValue);
         encodedKey = encodeURIComponent("questionSession");
-        encodedValue = encodeURIComponent("0");
+        encodedValue = encodeURIComponent("1");
         formBody.push(encodedKey + "=" + encodedValue);
 
         var formBody1 = [];
@@ -208,7 +208,7 @@ export default class Game2 extends Component {
                         loading: false,
                         error: '',
                     });
-                    this.props.navigation.navigate('Images', {tgId: this.state.tgId, userId: this.state.participantId,positiveColor: responseJson.positiveColor, negativeColor: responseJson.negativeColor, neutralColor: responseJson.neutralColor, sessionId: responseJson.sessionId});
+                    this.props.navigation.navigate('Home');
                 }
                 else {
                     this.setState({
