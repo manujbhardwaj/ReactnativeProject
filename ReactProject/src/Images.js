@@ -94,7 +94,15 @@ export default class Images extends Component {
         return (
             <View style={outerContainer}>
                 <View style={container}>
-                    <Image style={styles.img} source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=1/5cc92d16-b832-11e6-80f5-76304dec7eb7.jpg&source=android'}}/>
+                    {
+                        this.state.images.map((item, index) => {
+                            return (
+                                <View key={index} style={buttonArea}>
+                                    <Image style={styles.img} source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath='+item.imagePath+'&source=android'}}/>
+                                </View>
+                            )
+                        })
+                    }
                 </View>
             </View>
         );
