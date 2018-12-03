@@ -10,6 +10,7 @@ import {
     Button,
 } from 'react-native';
 import Loader from "./Loader";
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 const styles = StyleSheet.create({
     img: {
@@ -38,6 +39,7 @@ export default class Images extends Component {
             index: 0,
             loading: false,
             error: '',
+            gestureName: 'none',
         };
     }
 
@@ -62,18 +64,48 @@ export default class Images extends Component {
     }
 
     onUpdate() {
-        console.log("manuj");
-        if(this.state.index === this.state.images.length-1){
-            this.props.navigation.navigate('Game2', {tgId: this.state.tgId, sessionId: this.state.sessionId, userId: this.state.userId});
+
+    }
+
+    onSwipeUp() {
+        console.log("up");
+        if (this.state.index === this.state.images.length - 1) {
+            this.props.navigation.navigate('Game2', {
+                tgId: this.state.tgId,
+                sessionId: this.state.sessionId,
+                userId: this.state.userId
+            });
         }
-        else{
+        else {
             this.setState({
-                index: this.state.index+1,
+                index: this.state.index + 1,
+            });
+        }
+    }
+
+    onSwipeDown() {
+        console.log("down");
+        if (this.state.index === this.state.images.length - 1) {
+            this.props.navigation.navigate('Game2', {
+                tgId: this.state.tgId,
+                sessionId: this.state.sessionId,
+                userId: this.state.userId
+            });
+        }
+        else {
+            this.setState({
+                index: this.state.index + 1,
             });
         }
     }
 
     render() {
+
+        const config = {
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80
+        };
+
         this.state.positiveColor = this.props.navigation.state.params.positiveColor;
         this.state.negativeColor = this.props.navigation.state.params.negativeColor;
         this.state.neutralColor = this.props.navigation.state.params.neutralColor;
@@ -93,14 +125,16 @@ export default class Images extends Component {
                         alignItems: 'center',
                         backgroundColor: this.state.positiveColor
                     }}>
-                        <TouchableOpacity onPress={() => {
-                            this.onUpdate()
-                        }}>
-                        <Image style={styles.img}
-                               source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=' + this.state.images[this.state.index].imagePath + '&source=android'}}/>
-                        <Text>{this.state.images[this.state.index].imagePath}</Text>
-                        <Text>{this.state.index}</Text>
-                        </TouchableOpacity>
+                        <GestureRecognizer
+                            onSwipeUp={() => this.onSwipeUp()}
+                            onSwipeDown={() => this.onSwipeDown()}
+                            config={config}
+                        >
+                            <Image style={styles.img}
+                                   source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=' + this.state.images[this.state.index].imagePath + '&source=android'}}/>
+                            <Text>{this.state.images[this.state.index].imagePath}</Text>
+                            <Text>{this.state.index}</Text>
+                        </GestureRecognizer>
                     </View>);
 
             }
@@ -112,14 +146,16 @@ export default class Images extends Component {
                         alignItems: 'center',
                         backgroundColor: this.state.negativeColor
                     }}>
-                        <TouchableOpacity onPress={() => {
-                            this.onUpdate()
-                        }}>
-                        <Image style={styles.img}
-                               source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=' + this.state.images[this.state.index].imagePath + '&source=android'}}/>
-                        <Text>{this.state.images[this.state.index].imagePath}</Text>
-                        <Text>{this.state.index}</Text>
-                        </TouchableOpacity>
+                        <GestureRecognizer
+                            onSwipeUp={() => this.onSwipeUp()}
+                            onSwipeDown={() => this.onSwipeDown()}
+                            config={config}
+                        >
+                            <Image style={styles.img}
+                                   source={{uri: 'http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/imageUpload?imagePath=' + this.state.images[this.state.index].imagePath + '&source=android'}}/>
+                            <Text>{this.state.images[this.state.index].imagePath}</Text>
+                            <Text>{this.state.index}</Text>
+                        </GestureRecognizer>
                     </View>);
             }
         }
