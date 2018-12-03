@@ -68,7 +68,6 @@ export default class Game extends Component {
     }
 
     renderIf(item, index) {
-        console.log("manuj");
         if (item.responseType === 'Categorical') {
             return (
                 <View>
@@ -101,7 +100,7 @@ export default class Game extends Component {
         } else {
             return (
                 <View style={styles.btn}>
-                    <Text> {item.startLabel}</Text>
+                    <Text style={{marginLeft:-10}}> {item.startLabel}</Text>
                     <View>
                         <Slider style={{width: 200}}
                                 step={1}
@@ -226,8 +225,6 @@ export default class Game extends Component {
 
         formBody = formBody.join("&");
 
-        console.log("send: "+ formBody)
-
         fetch('http://ec2-18-191-227-95.us-east-2.compute.amazonaws.com:8080/Psych-1/Questionnaire', {
             method: 'POST',
             headers: {
@@ -237,13 +234,12 @@ export default class Game extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("response: "+ JSON.stringify(responseJson));
                 if (responseJson.save === 'successful') {
                     this.setState({
                         loading: false,
                         error: '',
                     });
-                    this.props.navigation.navigate('Images', {positiveColor: responseJson.positiveColor, negativeColor: responseJson.negativeColor, neutralColor: responseJson.neutralColor, sessionId: responseJson.sessionId});
+                    this.props.navigation.navigate('Images', {tgId: this.state.tgId, positiveColor: responseJson.positiveColor, negativeColor: responseJson.negativeColor, neutralColor: responseJson.neutralColor, sessionId: responseJson.sessionId});
                 }
                 else {
                     this.setState({
