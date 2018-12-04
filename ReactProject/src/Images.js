@@ -1,21 +1,18 @@
 import React, {Component} from 'react';
 import {
-    View,
+    Dimensions,
     Text,
     StyleSheet,
-    ScrollView,
     Image,
-    TouchableOpacity,
-    Slider,
-    Button,
 } from 'react-native';
 import Loader from "./Loader";
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import GestureRecognizer from 'react-native-swipe-gestures';
 
 const styles = StyleSheet.create({
     img: {
-        height: 400,
-        width: 400,
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
+        resizeMode: 'contain',
     },
     outerContainer: {
         flex: 1,
