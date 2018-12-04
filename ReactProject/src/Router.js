@@ -8,6 +8,7 @@ import Home from './Home';
 import Game from './Game';
 import Game2 from './Game2';
 import Images from './Images';
+import Feedback from "./Feedback";
 
 const Router = createStackNavigator({
     Login: {screen: Login},
@@ -16,6 +17,7 @@ const Router = createStackNavigator({
     Game: {screen: Game},
     Game2: {screen: Game2},
     Images: {screen: Images},
+    Feedback: {screen: Feedback},
 });
 
 export default Router;

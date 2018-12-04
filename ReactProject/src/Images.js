@@ -39,7 +39,8 @@ export default class Images extends Component {
             negShown: false,
             loading: false,
             error: '',
-            gestureName: 'none',
+            correct: 0,
+            incorrect: 0
         };
 
         this.state.positiveColor = props.navigation.state.params.positiveColor;
@@ -152,12 +153,19 @@ export default class Images extends Component {
 
         this.state.resp.push("{" + val + "}");
 
+        if(item.imageType === 'Negative')
+            this.state.correct++;
+        else
+            this.state.incorrect++;
+
         if (this.state.index === this.state.images.length - 1) {
             this.sendResp();
             this.props.navigation.navigate('Game2', {
                 tgId: this.state.tgId,
                 sessionId: this.state.sessionId,
-                userId: this.state.userId
+                userId: this.state.userId,
+                correct: this.state.correct,
+                incorrect: this.state.incorrect
             });
         }
         else {
@@ -204,12 +212,19 @@ export default class Images extends Component {
 
         this.state.resp.push("{" + val + "}");
 
+        if(item.imageType === 'Positive')
+            this.state.correct++;
+        else
+            this.state.incorrect++;
+
         if (this.state.index === this.state.images.length - 1) {
             this.sendResp();
             this.props.navigation.navigate('Game2', {
                 tgId: this.state.tgId,
                 sessionId: this.state.sessionId,
-                userId: this.state.userId
+                userId: this.state.userId,
+                correct: this.state.correct,
+                incorrect: this.state.incorrect
             });
         }
         else {

@@ -58,11 +58,15 @@ export default class Game2 extends Component {
             slider: [],
             loading: false,
             error: '',
+            correct: 0,
+            incorrect: 0
         };
 
         this.state.participantId = props.navigation.state.params.userId;
         this.state.tgId = props.navigation.state.params.tgId;
         this.state.sessionId = props.navigation.state.params.sessionId;
+        this.state.correct = props.navigation.state.params.correct;
+        this.state.incorrect = props.navigation.state.params.incorrect;
     }
 
     onUpdate(item, index) {
@@ -216,7 +220,7 @@ export default class Game2 extends Component {
                         loading: false,
                         error: '',
                     });
-                    this.props.navigation.navigate('Home');
+                    this.props.navigation.navigate('Feedback', {correct: this.state.correct, incorrect: this.state.incorrect});
                 }
                 else {
                     this.setState({
