@@ -105,7 +105,6 @@ export default class Game extends Component {
             return (
                 <View style={styles.btn}>
                     <Text style={{marginLeft:-10}}> {item.startLabel}</Text>
-                    <View>
                         <Slider style={{width: 200}}
                                 step={1}
                                 minimumValue={0}
@@ -125,7 +124,6 @@ export default class Game extends Component {
                                         slider: a,
                                     });
                                 }}/>
-                    </View>
                     <Text> {item.endLabel}</Text>
                 </View>
             );
