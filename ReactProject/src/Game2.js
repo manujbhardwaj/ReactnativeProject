@@ -78,28 +78,36 @@ export default class Game2 extends Component {
             return (
                 <View>
                     <View style={styles.btn}>
-                        {this.state.checked[index] == item.startLabel ?
-                            <TouchableOpacity>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
-                            </TouchableOpacity> :
-                            <TouchableOpacity onPress={() => {
-                                this.onUpdate(item.startLabel, index)
-                            }}>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
-                            </TouchableOpacity>}
-                        <Text> {item.startLabel}</Text>
+                        {
+                            this.state.checked[index] == item.startLabel ?
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
+                                    <Text> {item.startLabel}</Text>
+                                </TouchableOpacity> :
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}
+                                                  onPress={() => {
+                                                      this.onUpdate(item.startLabel, index)
+                                                  }}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
+                                    <Text> {item.startLabel}</Text>
+                                </TouchableOpacity>
+                        }
                     </View>
                     <View style={styles.btn}>
-                        {this.state.checked[index] == item.endLabel ?
-                            <TouchableOpacity>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
-                            </TouchableOpacity> :
-                            <TouchableOpacity onPress={() => {
-                                this.onUpdate(item.endLabel, index)
-                            }}>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
-                            </TouchableOpacity>}
-                        <Text> {item.endLabel}</Text>
+                        {
+                            this.state.checked[index] == item.endLabel ?
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
+                                    <Text> {item.endLabel}</Text>
+                                </TouchableOpacity> :
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}
+                                                  onPress={() => {
+                                                      this.onUpdate(item.endLabel, index)
+                                                  }}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
+                                    <Text> {item.endLabel}</Text>
+                                </TouchableOpacity>
+                        }
                     </View>
                 </View>
             );

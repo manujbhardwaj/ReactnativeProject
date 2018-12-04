@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     buttonArea: {
         marginBottom: 20,
     },
-    errorMessage:{
+    errorMessage: {
         marginTop: 15,
         fontSize: 15,
         color: 'red',
@@ -76,54 +76,62 @@ export default class Game extends Component {
             return (
                 <View>
                     <View style={styles.btn}>
-                        {this.state.checked[index] == item.startLabel ?
-                            <TouchableOpacity>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
-                            </TouchableOpacity> :
-                            <TouchableOpacity onPress={() => {
-                                this.onUpdate(item.startLabel, index)
-                            }}>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
-                            </TouchableOpacity>}
-                        <Text> {item.startLabel}</Text>
+                        {
+                            this.state.checked[index] == item.startLabel ?
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
+                                    <Text> {item.startLabel}</Text>
+                                </TouchableOpacity> :
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}
+                                                  onPress={() => {
+                                                      this.onUpdate(item.startLabel, index)
+                                                  }}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
+                                    <Text> {item.startLabel}</Text>
+                                </TouchableOpacity>
+                        }
                     </View>
                     <View style={styles.btn}>
-                        {this.state.checked[index] == item.endLabel ?
-                            <TouchableOpacity>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
-                            </TouchableOpacity> :
-                            <TouchableOpacity onPress={() => {
-                                this.onUpdate(item.endLabel, index)
-                            }}>
-                                <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
-                            </TouchableOpacity>}
-                        <Text> {item.endLabel}</Text>
+                        {
+                            this.state.checked[index] == item.endLabel ?
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/OWcpX.png'}}/>
+                                    <Text> {item.endLabel}</Text>
+                                </TouchableOpacity> :
+                                <TouchableOpacity style={{flex: 1, flexDirection: 'row'}}
+                                                  onPress={() => {
+                                                      this.onUpdate(item.endLabel, index)
+                                                  }}>
+                                    <Image style={styles.img} source={{uri: 'https://i.stack.imgur.com/Kn8zA.png'}}/>
+                                    <Text> {item.endLabel}</Text>
+                                </TouchableOpacity>
+                        }
                     </View>
                 </View>
             );
         } else {
             return (
                 <View style={styles.btn}>
-                    <Text style={{marginLeft:-10}}> {item.startLabel}</Text>
-                        <Slider style={{width: 200}}
-                                step={1}
-                                minimumValue={0}
-                                maximumValue={5}
-                                value={this.state.slider[index]}
-                                onValuechange={val => {
-                                    let a = this.state.slider;
-                                    a[index] = val;
-                                    this.setState({
-                                        slider: a,
-                                    });
-                                }}
-                                onSlidingComplete={val => {
-                                    let a = this.state.slider;
-                                    a[index] = val;
-                                    this.setState({
-                                        slider: a,
-                                    });
-                                }}/>
+                    <Text style={{marginLeft: -10}}> {item.startLabel}</Text>
+                    <Slider style={{width: 200}}
+                            step={1}
+                            minimumValue={0}
+                            maximumValue={5}
+                            value={this.state.slider[index]}
+                            onValuechange={val => {
+                                let a = this.state.slider;
+                                a[index] = val;
+                                this.setState({
+                                    slider: a,
+                                });
+                            }}
+                            onSlidingComplete={val => {
+                                let a = this.state.slider;
+                                a[index] = val;
+                                this.setState({
+                                    slider: a,
+                                });
+                            }}/>
                     <Text> {item.endLabel}</Text>
                 </View>
             );
@@ -178,7 +186,7 @@ export default class Game extends Component {
         }
     }
 
-    sendResp(){
+    sendResp() {
 
         var formBody = [];
         var encodedKey = encodeURIComponent("tgId");
@@ -200,29 +208,29 @@ export default class Game extends Component {
             var encodedKey = "questionId";
             var encodedValue = this.state.questions[i].questionId;
 
-            var val = "\""+encodedKey+"\"" + ":" + "\""+encodedValue+"\""+ ",";
+            var val = "\"" + encodedKey + "\"" + ":" + "\"" + encodedValue + "\"" + ",";
 
-            if(this.state.questions[i].responseType === 'Categorical'){
+            if (this.state.questions[i].responseType === 'Categorical') {
                 encodedKey = "response";
                 encodedValue = this.state.checked[i];
-            }else{
+            } else {
                 encodedKey = "response";
                 encodedValue = this.state.slider[i];
             }
 
-            val = val + "\""+encodedKey+"\"" + ":" + "\""+encodedValue+"\"" + ",";
+            val = val + "\"" + encodedKey + "\"" + ":" + "\"" + encodedValue + "\"" + ",";
 
             encodedKey = "responseType";
             encodedValue = this.state.questions[i].responseType;
 
-            val = val + "\""+encodedKey +"\""+ ":" + "\""+encodedValue+"\"";
+            val = val + "\"" + encodedKey + "\"" + ":" + "\"" + encodedValue + "\"";
 
-            formBody1.push("{"+val+"}");
+            formBody1.push("{" + val + "}");
         }
         formBody1 = formBody1.join(",");
 
         encodedKey = encodeURIComponent("responses");
-        encodedValue = encodeURIComponent("["+formBody1+"]");
+        encodedValue = encodeURIComponent("[" + formBody1 + "]");
         formBody.push(encodedKey + "=" + encodedValue);
 
         formBody = formBody.join("&");
@@ -241,7 +249,14 @@ export default class Game extends Component {
                         loading: false,
                         error: '',
                     });
-                    this.props.navigation.navigate('Images', {tgId: this.state.tgId, userId: this.state.participantId,positiveColor: responseJson.positiveColor, negativeColor: responseJson.negativeColor, neutralColor: responseJson.neutralColor, sessionId: responseJson.sessionId});
+                    this.props.navigation.navigate('Images', {
+                        tgId: this.state.tgId,
+                        userId: this.state.participantId,
+                        positiveColor: responseJson.positiveColor,
+                        negativeColor: responseJson.negativeColor,
+                        neutralColor: responseJson.neutralColor,
+                        sessionId: responseJson.sessionId
+                    });
                 }
                 else {
                     this.setState({
